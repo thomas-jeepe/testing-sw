@@ -20,7 +20,7 @@ function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-
 
 const data = []
 
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 1000; i++) {
   data.push({ content: b()})
 }
 

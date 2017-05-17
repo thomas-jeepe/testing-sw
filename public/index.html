@@ -35,12 +35,14 @@
   setTimeout(() => {
     send_message_to_sw({type: 'GET_DATA'}, msg => {
       if (msg.data !== 'DONE') {
-        thing.push(msg.data)
         p.innerHTML += msg.data.content + '<br>'
+        thing.push(msg.data)
         for (let i = 0; i<1000; i++) {
           function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
-          b()
+          thing.push(b())
         }
+      } else {
+        console.log(thing)
       }
     })
   }, 1000)
