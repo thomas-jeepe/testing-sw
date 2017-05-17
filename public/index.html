@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Service Workers!</title>
+  <head>
+  <body>
+    <p id="hi"></p>
+    <script>
+  navigator.serviceWorker.register('/sw.js')
+    .then(function(reg) {
+
+    if(reg.installing) {
+      console.log('SW installing');
+    } else if(reg.waiting) {
+      console.log('SW installed');
+    } else if(reg.active) {
+      console.log('SW active');
+    }
+
+  }).catch(function(error) {
+    console.log(error);
+  })
+  function send_message_to_sw(msg, cb){
+        // Create a Message Channel
+        var msg_chan = new MessageChannel();
+
+        // Handler for recieving message reply from service worker
+        msg_chan.port1.onmessage = cb
+
+        // Send message to service worker along with port for reply
+        navigator.serviceWorker.controller.postMessage(msg, [msg_chan.port2]);
+  }
+  const p = document.getElementById('hi')
+  const thing = []
+  setTimeout(() => {
+    send_message_to_sw({type: 'GET_DATA'}, msg => {
+      if (msg.data !== 'DONE') {
+        thing.push(msg.data)
+        p.innerHTML += msg.data.content + '<br>'
+        for (let i = 0; i<1000; i++) {
+          function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
+          b()
+        }
+      }
+    })
+  }, 1000)
+  </script>
+  </body>
+<html>
